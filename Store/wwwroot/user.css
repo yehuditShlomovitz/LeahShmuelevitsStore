@@ -1,0 +1,14 @@
+﻿body {
+
+}
+.container{
+    visibility:hidden;
+}
+.divUpdate {
+    background-color: aqua;
+  /*  width: 100px;
+    height: 100px;*/
+}
+/*.containerOfUpdate {
+    visibility: hidden;
+}*/
