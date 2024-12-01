@@ -12,12 +12,12 @@ namespace Services
             _iuserRepository = iuserRepository;
         }
 
-        public User PostLoginS(string username, string password)
+        public Task<User> PostLoginS(string username, string password)
         {
 
             return _iuserRepository.PostLoginR(username, password);
         }
-        public User Post(User user)
+        public Task<User> Post(User user)
         {
             return _iuserRepository.Post(user);
         }

@@ -36,7 +36,7 @@ const login = async () => {
             }
         });
         if (data.status == 204) {
-            throw new Error("user not found")
+           throw new Error("user not found")
         }
         if (data.status == 400) {
             throw new Error("all fields are required")
@@ -50,7 +50,7 @@ const login = async () => {
     }
     catch (error) {
         console.log(error)
-        alert(error)
+        alert(error) 
     }
     
 }

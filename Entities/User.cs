@@ -1,21 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace Entities
-  
+namespace Entities;
+
+public partial class User
 {
-    public class User
-    {
-        public int UserId { get; set; }
+    [Required]
+    public int UserId { get; set; }
 
-        [EmailAddress]
-        public string UserName { get; set; }
+    [EmailAddress]
+    [Required]
+    [StringLength(50, ErrorMessage = "UserName max 50")]
+    public string UserName { get; set; } = null!;
 
-        [StringLength(20, ErrorMessage = "name between 5-20", MinimumLength = 5)]
-        public string Password { get; set; }
+    [Required]
+    [StringLength(20, ErrorMessage = "name between 5-20", MinimumLength = 5)]
+    public string Password { get; set; } = null!;
 
-        [Required]
-        public string FirstName { get; set; }
-     
-        public string LastName { get; set; }
-    }
+    [StringLength(50, ErrorMessage = "FirstName max 50")]
+    public string? FirstName { get; set; }
+
+    [StringLength(50, ErrorMessage = "LastName max 50")]
+    public string? LastName { get; set; }
 }

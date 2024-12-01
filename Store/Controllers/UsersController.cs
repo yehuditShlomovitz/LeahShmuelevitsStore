@@ -35,23 +35,33 @@ namespace Store.Controllers
         // POST api/<UsersController>0w
         [HttpPost]
         [Route("login")]
-        public ActionResult<User> PostLogin([FromQuery] string username,string password)
+        public async Task<ActionResult<User>> PostLogin([FromQuery] string username,string password)
         {
             //where we will put the ask of the null?
-            User user = _iuserservice.PostLoginS(username, password);
+            User user =await _iuserservice.PostLoginS(username, password);
             if (user != null)
                 return Ok(user);
             return NoContent();
         }
 
+
+
+
+
+
+
+
+
+
+
         [HttpPost]
-        public ActionResult<User> PostNewUser([FromBody] User user)
+        public async Task<ActionResult<User>> PostNewUser([FromBody] User user)
         {
             if (_iuserservice.CheckPassword(user.Password) < 4)
             {
                 return BadRequest();
             }
-            User newUser = _iuserservice.Post(user);
+            User newUser =await _iuserservice.Post(user);
             if (newUser == null)
                 return NoContent();
              return Ok(newUser);
