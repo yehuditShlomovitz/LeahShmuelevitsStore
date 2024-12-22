@@ -20,6 +20,12 @@ namespace Repositories
             User user = await _ManagerDbContext.Users.FirstOrDefaultAsync(user => user.UserName == username && user.Password == password);
             return user;
         }
+
+        public async Task<User> GetById(int id)
+        {
+            return await _ManagerDbContext.Users.FirstOrDefaultAsync(u => u.UserId==id);
+        }
+
         public async Task<User> Post(User user)
         {
             await _ManagerDbContext.Users.AddAsync(user);

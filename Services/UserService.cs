@@ -22,9 +22,14 @@ namespace Services
             return _iuserRepository.Post(user);
         }
 
-        public void Put(int id, User user)
+        public async Task<User> GetById(int id)
         {
-            _iuserRepository.Put(id, user);
+            return await _iuserRepository.GetById(id);
+        }
+        
+        public async Task Put(int id, User user)
+        {
+           await _iuserRepository.Put(id, user);
         }
 
         public int CheckPassword(string password)

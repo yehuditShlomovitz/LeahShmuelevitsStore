@@ -2,6 +2,9 @@
 using System.Text.Json;
 using Services;
 using Entities;
+using AutoMapper;
+using DTO;
+using Microsoft.AspNetCore.Http.HttpResults;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Store.Controllers
@@ -11,10 +14,12 @@ namespace Store.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        IMapper _imapper;
         IUserService _iuserservice ;
 
-        public UsersController(IUserService iuserservice)
+        public UsersController(IUserService iuserservice, IMapper imapper)
         {
+            _imapper = imapper;
             _iuserservice = iuserservice;
         }
 
@@ -25,20 +30,25 @@ namespace Store.Controllers
             return new string[] { "how", "are you" };
         }
 
-        // GET api/<UsersController>/5
+
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<User>> GetById(int id)
         {
-            return "value";
+            User user = await _iuserservice.GetById(id);
+            GetUserDTO userDTO = _imapper.Map<User, GetUserDTO>(user);
+            if (userDTO == null)
+                return NoContent();
+            return Ok(userDTO);
+
         }
 
-        // POST api/<UsersController>0w
-        [HttpPost]
-        [Route("login")]
-        public async Task<ActionResult<User>> PostLogin([FromQuery] string username,string password)
+        //POST api/<UsersController>0w
+       [HttpPost]
+       [Route("login")]
+        public async Task<ActionResult<User>> PostLogin([FromQuery] string username, string password)
         {
             //where we will put the ask of the null?
-            User user =await _iuserservice.PostLoginS(username, password);
+            User user = await _iuserservice.PostLoginS(username, password);
             if (user != null)
                 return Ok(user);
             return NoContent();
@@ -46,47 +56,118 @@ namespace Store.Controllers
 
 
 
-
-
-
-
-
+        //[HttpPost]
+        //[Route("login")]
+        //public async Task<ActionResult<User>> PostLogin([FromQuery]UserDTO user)
+        //{
+        //    //where we will put the ask of the null?
+        //    User user1 =_imapper.Map<UserDTO,User>(user)
+        //     await _iuserservice.PostLoginS(user1);  
+        //    if (user1 != null)
+        //        return Ok(user1);
+        //    return NoContent();
+        //}
 
 
 
         [HttpPost]
-        public async Task<ActionResult<User>> PostNewUser([FromBody] User user)
+        public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
         {
-            if (_iuserservice.CheckPassword(user.Password) < 4)
-            {
-                return BadRequest();
-            }
-            User newUser =await _iuserservice.Post(user);
-            if (newUser == null)
-                return NoContent();
-             return Ok(newUser);
-            
+            int resPassword = _iuserservice.CheckPassword(user.Password);
+            if (resPassword < 4)
+                return NotFound(resPassword);
+            User user1 = _imapper.Map<UserDTO, User>(user);
+            User newUser = await _iuserservice.Post(user1);
+            UserDTO newUser1 = _imapper.Map<User, UserDTO>(newUser);
+            if (newUser1 != null)
+                return Ok(newUser1);
+            return NoContent();
         }
+
+
+
+
+
+        //[HttpPost]
+        //public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
+        //{
+        //    //if (_iuserservice.CheckPassword(user.Password) < 4)
+        //    //{
+        //    //    return BadRequest();
+        //    //}
+        //    User newUser = _imapper.Map<UserDTO, User>(user);
+        //    await _iuserservice.Post(newUser);
+        //    if (newUser == null)
+        //        return NoContent();
+        //    return CreatedAtAction(nameof(GetById), new { Id = newUser.UserId }, newUser);
+
+        //}
+
+
+
+
+
+    
+
+        // PUT api/<UsersController>/5
+        [HttpPut("{id}")]
+        public async Task Put(int id, [FromBody] UserDTO user)
+        {
+            User user1 = _imapper.Map<UserDTO, User>(user);
+           await _iuserservice.Put(id, user1);
+        }
+
+
 
 
         [HttpPost("CheckPassword")]
         public ActionResult<int> CheckPassword([FromBody] string password)
         {
-           var res =  _iuserservice.CheckPassword(password);
-            if (res <4)
-                return BadRequest(res);
-            return Ok(res);
-        }
+           int resPassword = _iuserservice.CheckPassword(password);
+            return resPassword;
 
-        // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User userFromClient)
-        {
-            _iuserservice.Put(id, userFromClient);
-        }
-
-        // DELETE api/<UsersController>/5
-        {
 
         }
+
+
+
+        //[HttpPost]
+        //public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
+        //{
+        //    if (_iuserservice.CheckPassword(user.Password) < 4)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    User newUser = await _iuserservice.Post(user);
+        //    if (newUser == null)
+        //        return NoContent();
+        //    return CreatedAtAction(nameof(GetById), new { Id = newUser.UserId }, newUser);
+
+        //}
+
+
+
+
+        //[HttpPost("CheckPassword")]
+        //public ActionResult<int> CheckPassword([FromBody] string password)
+        //{
+        //    var res = _iuserservice.CheckPassword(password);
+        //    if (res < 4)
+        //        return BadRequest(res);
+        //    return Ok(res);
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
+}
