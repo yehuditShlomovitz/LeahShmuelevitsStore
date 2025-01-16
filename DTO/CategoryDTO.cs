@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public record  CategoryDTO(string CategoryName);
+    public record  CategoryDTO(string CategoryName,int Id);/////////האם כך זה טוב הID 
     
 }

@@ -11,7 +11,7 @@ const getDataFromUpdate = () => {
     const password = document.querySelector("#passwordOnUpdate").value
     const firstname = document.querySelector("#firstnameOnUpdate").value
     const lastname = document.querySelector("#lastnameOnUpdate").value
-    const userId = sessionStorage.getItem("id");
+    const userId = sessionStorage.getItem("userId");
     return { userId, username, password, firstname, lastname }
 }
 const getDataFromLogin = () => {
@@ -45,8 +45,10 @@ const login = async () => {
         const dataLogin = await data.json()
         console.log('post data',dataLogin)
         //sessionStorage
-        sessionStorage.setItem("id", dataLogin.userId)
-        window.location.href = 'userDetails.html'
+        sessionStorage.setItem("userId", dataLogin.userId)
+        window.location.href = 'Products.html'
+        //window.location.href = 'userDetails.html'
+
     }
     catch (error) {
         console.log(error)
@@ -86,10 +88,10 @@ const register = async () => {
     }
 }
 const updateUser = async () => {
-    console.log(sessionStorage.getItem("id"))
+    console.log(sessionStorage.getItem("userId"))
     const user = getDataFromUpdate()
     try {
-        console.log(sessionStorage.getItem("id"))
+        console.log(sessionStorage.getItem("userId"))
         const updateFromData = await fetch(`api/Users/${sessionStorage.getItem("id")}`, {
             method: 'PUT',
             headers: {
@@ -100,7 +102,7 @@ const updateUser = async () => {
         if (updateFromData.status == 400) {
             throw new Error("all fields are required")
         }
-        alert(`user ${sessionStorage.getItem("id")} update`)
+        alert(`user ${sessionStorage.getItem("userId")} update`)
     }
     catch (error) {
         alert(error)

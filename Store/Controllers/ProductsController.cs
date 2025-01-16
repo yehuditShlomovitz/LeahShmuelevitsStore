@@ -28,9 +28,9 @@ namespace Store.Controllers
         //    return await _iproductService.Get();
         //}
 
-        public async Task<ActionResult<IEnumerable<Product>>> Get()
+        public async Task<ActionResult<IEnumerable<Product>>> Get([FromQuery]string? desc, [FromQuery] int? minPrice, [FromQuery] int? maxPrice, [FromQuery] int?[] categoryIds)
         {
-            IEnumerable<Product> product = await _iproductService.Get();
+            IEnumerable<Product> product = await _iproductService.Get(desc, minPrice, maxPrice, categoryIds);
             IEnumerable<ProductDTO> productDTO = _imapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(product);
             return Ok(productDTO);
 
