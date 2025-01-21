@@ -16,13 +16,14 @@ namespace Store.Controllers
     {
         IMapper _imapper;
         IUserService _iuserservice ;
-
-        public UsersController(IUserService iuserservice, IMapper imapper)
-        {
+         private readonly ILogger<UsersController> _logger;
+        public UsersController(IUserService iuserservice, IMapper imapper, ILogger<UsersController> logger)
+        {   _logger = logger;
             _imapper = imapper;
             _iuserservice = iuserservice;
         }
-
+        
+        
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -45,12 +46,16 @@ namespace Store.Controllers
         //POST api/<UsersController>0w
        [HttpPost]
        [Route("login")]
-        public async Task<ActionResult<User>> PostLogin([FromQuery] string username, string password)
+        public async Task<ActionResult<User>> PostLogin([FromQuery] string username,string password)
         {
             //where we will put the ask of the null?
             User user = await _iuserservice.PostLoginS(username, password);
             if (user != null)
+            {
+                _logger.LogCritical($"Login attempted with User name-{username} and with password-{password}");
                 return Ok(user);
+            }
+               
             return NoContent();
         }
 
