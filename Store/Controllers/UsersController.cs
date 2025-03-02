@@ -78,16 +78,54 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
         {
-            int resPassword = _iuserservice.CheckPassword(user.Password);
-            if (resPassword < 4)
-                return NotFound(resPassword);
             User user1 = _imapper.Map<UserDTO, User>(user);
             User newUser = await _iuserservice.Post(user1);
+            if (newUser == null)
+                return BadRequest();
             UserDTO newUser1 = _imapper.Map<User, UserDTO>(newUser);
             if (newUser1 != null)
                 return Ok(newUser1);
             return NoContent();
         }
+
+
+
+        //פוסט לפני העברה של הבדיקה לסרביס
+
+        //[HttpPost]
+        //public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
+        //{
+        //    int resPassword = _iuserservice.CheckPassword(user.Password);
+        //    if (resPassword < 4)
+        //        return NotFound(resPassword);
+        //    User user1 = _imapper.Map<UserDTO, User>(user);
+        //    User newUser = await _iuserservice.Post(user1);
+        //    UserDTO newUser1 = _imapper.Map<User, UserDTO>(newUser);
+        //    if (newUser1 != null)
+        //        return Ok(newUser1);
+        //    return NoContent();
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -112,7 +150,7 @@ namespace Store.Controllers
 
 
 
-    
+
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]

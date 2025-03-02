@@ -8,10 +8,15 @@ const load = addEventListener("load", async () => {
 
 const drawCart = async () => {
     price=0
-    for (let i = 0; i < cart.length; i++) {
-        price+=cart[i].price
-        drawOneItem(cart[i])
-    }
+    //for (let i = 0; i < cart.length; i++) {
+    //    price+=cart[i].price
+    //    drawOneItem(cart[i])
+    //}
+
+    cart.forEach(item => {
+        price += item.price;
+        drawOneItem(item);
+    });
     totalAmountAndPrice(price)
 }
 const totalAmountAndPrice = () => {

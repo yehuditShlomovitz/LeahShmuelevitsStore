@@ -35,6 +35,9 @@ const login = async () => {
                 password: user.password
             }
         });
+        if (data.status == 400) {
+            alert("לא ניתן להירשם עם סיסמה גרועה")
+        }
         if (data.status == 204) {
            throw new Error("user not found")
         }
@@ -92,7 +95,7 @@ const updateUser = async () => {
     const user = getDataFromUpdate()
     try {
         console.log(sessionStorage.getItem("userId"))
-        const updateFromData = await fetch(`api/Users/${sessionStorage.getItem("id")}`, {
+        const updateFromData = await fetch(`api/Users/${sessionStorage.getItem("userId")}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

@@ -3,7 +3,7 @@
 
 const load = addEventListener("load", async () => {
     drawProductList()
-    drowCategory()
+    getCategories()
 })
 
 
@@ -82,7 +82,7 @@ const showAllProducts = async (products) => {
         showOneProduct(products[i])
     }
 }
-const drowCategory = async () => {
+const getCategories = async () => {
     try {
         const allCategories = await fetch("api/Categories", {
             method: 'Get',

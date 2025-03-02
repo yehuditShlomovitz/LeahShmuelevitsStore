@@ -14,12 +14,14 @@ namespace Services
 
         public Task<User> PostLoginS(string username, string password)
         {
-
             return _iuserRepository.PostLoginR(username, password);
         }
-        public Task<User> Post(User user)
+        public async Task<User> Post(User user)
         {
-            return _iuserRepository.Post(user);
+            int resPassword = CheckPassword(user.Password);
+            if (resPassword < 4)
+                return null;
+            return await _iuserRepository.Post(user);
         }
 
         public async Task<User> GetById(int id)
