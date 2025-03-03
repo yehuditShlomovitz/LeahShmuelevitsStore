@@ -14,9 +14,10 @@ namespace Store.Controllers
     {
         IMapper _imapper;
         IOrderService _iorderService;
-
-        public OrdersController(IOrderService iorderService,IMapper imapper)
+        private readonly ILogger<UsersController> _logger;
+        public OrdersController(IOrderService iorderService,IMapper imapper, ILogger<UsersController> logger)
         {
+            _logger = logger;
             _imapper = imapper;
             _iorderService = iorderService;
         }
@@ -60,12 +61,24 @@ namespace Store.Controllers
         //}
 
         [HttpPost]
-        public async Task<ActionResult<OrderDTO>> Post([FromBody] OrderDTO order)
+        public async Task<ActionResult<GetOrderDTO>> Post([FromBody] OrderDTO order)
         {
 
             Order order1 = _imapper.Map<OrderDTO, Order>(order);
-            await _iorderService.Post(order1);
-                return CreatedAtAction(nameof(Get), new {Id=order.UserId},order);
+
+            Order check = await _iorderService.Post(order1);
+
+            if (check!=null)
+            {   
+                GetOrderDTO order2 = _imapper.Map<Order, GetOrderDTO>(order1);
+             return Ok(order2);
+            }
+            else
+            {
+                _logger.LogInformation($"{order.UserId} try to change the sum of the order!!!");
+                return Unauthorized();
+            }
+           
             
         }
 

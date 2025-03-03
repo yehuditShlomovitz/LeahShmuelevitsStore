@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DTO
 {
-    public record  UserDTO(string UserName, string? FirstName,string? LastName, string Password);
-    public record  GetUserDTO(string UserName, string? FirstName, string? LastName);
+    public record  UserDTO([EmailAddress(ErrorMessage ="כתובת מייל לא תקינה"),Required] string UserName, string? FirstName,string? LastName, [Required] string Password);
+    public record  GetUserDTO([EmailAddress(ErrorMessage = "כתובת מייל לא תקינה"), Required] string UserName, string? FirstName, string? LastName);
 
 }

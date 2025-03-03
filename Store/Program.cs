@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Services;
-using Store;
 using NLog.Web;
+using Store.Middleware;
+using PresidentsApp.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,8 +22,7 @@ builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<ManagerDbContext>(options => options.UseSqlServer
-("Server=SRV2\\PUPILS;Database=ManagerDB;Trusted_Connection=True;TrustServerCertificate=True"));
+builder.Services.AddDbContext<ManagerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("School")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -36,6 +36,7 @@ if(app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseErrorHandlingMiddleware();
 app.UseMiddlewareRating();
 app.UseHttpsRedirection();
 

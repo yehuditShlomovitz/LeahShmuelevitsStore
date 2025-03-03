@@ -36,7 +36,7 @@ const login = async () => {
             }
         });
         if (data.status == 400) {
-            alert("לא ניתן להירשם עם סיסמה גרועה")
+            alert(" cant register with bad password")
         }
         if (data.status == 204) {
            throw new Error("user not found")
@@ -72,6 +72,11 @@ const seeTheUpdateUser = () => {
 const register = async () => {
     const user = getDataFromRegister()
     console.log(user.password.length)
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(user.username)) {
+        alert("The username must be a valid email address.");
+        return;
+    }
     try {      
         const postFromData = await fetch("api/Users", {
             method: 'POST',
@@ -80,6 +85,7 @@ const register = async () => {
             },
             body: JSON.stringify(user)
         });
+       
         if (postFromData.status == 400) {
             alert("cant register with bad password")
         }
@@ -114,6 +120,9 @@ const updateUser = async () => {
 const CheckPassword = async () => {
     const progress = document.querySelector("#progress")
     const password2 = document.querySelector("#password2").value
+    if (password2.length > 20 || password2.length < 5) {
+        alert("the password must be between 5 to 20")
+    }
     try {
         
         const postProgress = await fetch("api/Users/CheckPassword", {
@@ -124,9 +133,7 @@ const CheckPassword = async () => {
             body: JSON.stringify(password2)
         });
       
-        if (password2.length > 20 || password2.length < 5) {
-            alert("the password must be between 5 to 20")
-        }
+        
         if (postProgress.status == 400) {
             alert("dont password!")
         }

@@ -31,6 +31,11 @@ namespace Repositories
             // return  await _ManagerDbContext.Products.Include(p=>p.Category).ToListAsync();
 
         }
-    
+
+        public async Task<Product> GetById(int id)
+        {
+            return await _ManagerDbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
     }
 }

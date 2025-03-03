@@ -58,13 +58,19 @@ const addOrder = async () => {
             },
             body: JSON.stringify(order)
         }
-        )
+        );
+        let orderData = await data.json();
+        if (data.status == 401) {
+            alert("you cant acomplish the order!!!!!!!")
+        }
         //const dataOrder = await data.json()
         //console.log("dataOrder======================================================", dataOrder)
-       
-        sessionStorage.setItem("cart", JSON.stringify([]))
-        alert("sucsseful order!!!!!!!!!!!!!")
-        window.location.href = "Products.html"
+        else {
+          sessionStorage.setItem("cart", JSON.stringify([]))
+          alert(`order num ${orderData.id} sucsseful order!!!!!!!!!!!!!`)
+          window.location.href = "Products.html"
+        }
+        
        
     }
     catch (error) {
@@ -83,6 +89,7 @@ const placeOrder = async () => {
     }
 }
 const createOrder = () => {
+
     let orderItemsList = cart.map(i => { return { Quantity: 1, ProductId: i.id } })
     let order = {
         "OrderDate": "2025-01-01",
